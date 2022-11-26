@@ -29,7 +29,7 @@ gradientTexture.minFilter = THREE.NearestFilter;
 gradientTexture.magFilter = THREE.NearestFilter;
 gradientTexture.generateMipmaps = false;
 
-const environmentMapTexture = cubeTextureLoader.load([
+const environtMapTexture = cubeTextureLoader.laod([
 	"/textures/environmentMaps/0/px.jpg",
 	"/textures/environmentMaps/0/nx.jpg",
 	"/textures/environmentMaps/0/py.jpg",
