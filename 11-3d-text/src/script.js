@@ -4,7 +4,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "lil-gui";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
-// import { AxesHelper } from "three";
 
 /**
  * Textures
@@ -13,12 +12,16 @@ const textureLoader = new THREE.TextureLoader();
 const matcapTexture = textureLoader.load("/textures/matcaps/10.png");
 
 /**
+ *Scene
+ */
+
+const scene = new THREE.Scene();
+
+/**
  * Fonts
  */
-//use the font loader, can use multiple
 const fontLoader = new FontLoader();
 const textGeometry = new TextGeometry();
-
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
 	const textGeometry = new TextGeometry("hey", {
 		font: font,
@@ -32,7 +35,7 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
 		bevelSegments: 4,
 	});
 
-	const textGeometryTwo = new TextGeometry("I am Sintija", {
+	const textGeometryTwo = new TextGeometry("From Three.js", {
 		font: font,
 		size: 1,
 		height: 0.2,
@@ -44,62 +47,41 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
 		bevelSegments: 4,
 	});
 
-	//add the bounding
+	/**
+	 * Materials
+	 */
+	//add the bounding box
 	textGeometry.computeBoundingBox();
-	console.log(textGeometry.boundingBox);
-
-	//move the bounding box in the centre alternative method
-	//add -0.02 because of the bevel
-	//z depth -0.03
-	// textGeometry.translate(
-	// 	-(textGeometry.boundingBox.max.x - 0.02) * 0.5,
-	// 	-(textGeometry.boundingBox.max.y - 0.02) * 0.5,
-	// 	-(textGeometry.boundingBox.max.z - 0.03) * 0.5
-	// );
-
-	//testing -x and x values to be the same
-	// textGeometry.computeBoundingBox();
-	// console.log(textGeometry.boundingBox);
-
 	// Move the bounding box in the middle
 	textGeometry.center();
 	textGeometryTwo.center();
-
-	const textMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
-	// textMaterial.wireframe = true;
-	// textMaterial.matcap = matcapTexture;
-	const text = new THREE.Mesh(textGeometry, textMaterial);
+	//add the material
+	const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
+	const text = new THREE.Mesh(textGeometry, material);
 	scene.add(text);
-
-	const textMaterialTwo = new THREE.MeshMatcapMaterial();
-	// textMaterial.wireframe = true;
-	textMaterialTwo.matcap = matcapTextureTwo;
-	const textTwo = new THREE.Mesh(textGeometryTwo, textMaterialTwo);
+	const textTwo = new THREE.Mesh(textGeometryTwo, material);
 	scene.add(textTwo);
 	textTwo.position.y = -1.5;
+
+	/**
+	 * Donuts
+	 */
+	const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
+	for (let i = 0; i < 60; i++) {
+		const donut = new THREE.Mesh(donutGeometry, material);
+
+		donut.position.x = (Math.random() - 0.5) * 10;
+		donut.position.y = (Math.random() - 0.5) * 10;
+		donut.position.z = (Math.random() - 0.5) * 10;
+
+		donut.rotation.x = Math.random() * Math.PI;
+		donut.rotation.y = Math.random() * Math.PI;
+
+		const scale = Math.random();
+		donut.scale.set(scale, scale, scale);
+		scene.add(donut);
+	}
 });
-
-// Add donuts to the scene
-
-const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
-const donutMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
-// Scene
-const scene = new THREE.Scene();
-
-for (let i = 0; i < 100; i++) {
-	const donut = new THREE.Mesh(donutGeometry, donutMaterial);
-
-	donut.position.x = (Math.random() - 0.5) * 10;
-	donut.position.y = (Math.random() - 0.5) * 10;
-	donut.position.z = (Math.random() - 0.5) * 10;
-
-	donut.rotation.x = Math.random() * Math.PI;
-	donut.rotation.y = Math.random() * Math.PI;
-
-	const scale = Math.random();
-	donut.scale.set(scale, scale, scale);
-	scene.add(donut);
-}
 
 /**
  * Base
