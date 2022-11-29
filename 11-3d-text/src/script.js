@@ -1,7 +1,7 @@
 import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import * as dat from "lil-gui";
+// import * as dat from "lil-gui";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 
@@ -87,7 +87,7 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
  * Base
  */
 // Debug
-const gui = new dat.GUI();
+// const gui = new dat.GUI();
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -126,15 +126,16 @@ window.addEventListener("resize", () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(
-	75,
-	sizes.width / sizes.height,
+	45,
+	window.innerWidth / window.innerHeight,
 	0.1,
-	100
+	1000
 );
-camera.position.x = 1;
-camera.position.y = 1;
-camera.position.z = 2;
-scene.add(camera);
+// position and point the camera to the center of the scene
+camera.position.x = -0.5;
+camera.position.y = -1;
+camera.position.z = 8;
+camera.lookAt(scene.position);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
